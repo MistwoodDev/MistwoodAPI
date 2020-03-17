@@ -1,0 +1,12 @@
+{
+	"authors": [
+		"Munchii"
+	],
+	"copyright": "Copyright © 2020, Munchii",
+	"dependencies": {
+		"vibe-d": "0.9.0-alpha.2"
+	},
+	"description": "The official REST API for Mistwood Minecraft servers",
+	"license": "MIT",
+	"name": "mistwoodapi"
+}

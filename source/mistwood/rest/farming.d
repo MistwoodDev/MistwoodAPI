@@ -63,6 +63,8 @@ public class FarmingAPI : IFarmingAPI
 
         auto res = findOneByName!Player(_playerName);
 
+        enforceHTTP(!res.isNull, HTTPStatus.notFound, "Could not find player with name: " ~ _playerName);
+
         return serializeToJson(res.get());
     }
 
@@ -77,6 +79,8 @@ public class FarmingAPI : IFarmingAPI
 
         auto res = findOneByName!Farm(_farmName);
 
+        enforceHTTP(!res.isNull, HTTPStatus.notFound, "Could not find farm with name: " ~ _farmName);
+
         return serializeToJson(res.get());
     }
 
@@ -87,7 +91,13 @@ public class FarmingAPI : IFarmingAPI
      +/
     public Json getFarmPlayers(string _farmName) @safe
     {
-        return serializeToJson(["Error": "NOT IMPLEMENTED"]);
+        import mistwood.db : findOneByName;
+
+        auto res = findOneByName!Farm(_farmName);
+
+        enforceHTTP(!res.isNull, HTTPStatus.notFound, "Could not find farm with name: " ~ _farmName);
+
+        return serializeToJson(res.get().players);
     }
 
     /++
@@ -97,6 +107,7 @@ public class FarmingAPI : IFarmingAPI
      +/
     public Json getFarmPlayer (string _farmName, string _playerName) @safe
     {
+        // TODO: Make this
         return serializeToJson(["Error": "NOT IMPLEMENTED"]);
     }
 }

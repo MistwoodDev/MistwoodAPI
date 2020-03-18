@@ -1,5 +1,9 @@
 module mistwood.data.player;
 
+import vibe.data.json;
+import vibe.data.bson;
+import vibe.data.serialization;
+
 /++
  + The object that holds info about a player
  +/
@@ -15,12 +19,12 @@ public struct Player
      + The players name
      +/
     @name("Name")
-    public string name;
+    public string playerName;
 
     /++
      + The farm (UUID) the player is currently a member of
      +/
-    @name("Farm")
+    @name("FarmID")
     public string farm;
 
     /++

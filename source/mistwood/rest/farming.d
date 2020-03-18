@@ -1,12 +1,13 @@
 module mistwood.rest.farming;
 
+import std.stdio;
 import mistwood.data;
 import vibe.d;
 
 /++
  + API interface for the `/api/vX/farming` endpoint.
  +/
-@path("/api/v" + apiVersion + "/farming")
+@path("/api/v" ~ apiVersion ~ "/farming")
 public interface IFarmingAPI
 {
     /++
@@ -86,7 +87,7 @@ public class FarmingAPI : IFarmingAPI
      +/
     public Json getFarmPlayers(string _farmName) @safe
     {
-
+        return serializeToJson(["Error": "NOT IMPLEMENTED"]);
     }
 
     /++
@@ -96,6 +97,6 @@ public class FarmingAPI : IFarmingAPI
      +/
     public Json getFarmPlayer (string _farmName, string _playerName) @safe
     {
-        
+        return serializeToJson(["Error": "NOT IMPLEMENTED"]);
     }
 }

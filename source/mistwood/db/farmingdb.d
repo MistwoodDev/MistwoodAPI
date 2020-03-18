@@ -1,16 +1,15 @@
 module mistwood.db.farmingdb;
 
-import std.file;
-import std.json;
-
 import vibe.d;
+import std.typecons;
+import mistwood.data.file : config;
+import std.conv;
 
 /++
  + List of all the collections in the database
  +/
 public const string[] collectionNames = ["players", "farms"];
 
-private const JSONValue config = parseJSON(read("config.json"));
 private MongoDatabase mongo;
 
 /++
@@ -18,12 +17,23 @@ private MongoDatabase mongo;
  +/
 public void connect()
 {
-    connectMongo();
+    connectMongo(
+        config["db"]["host"].to!string,
+        config["db"]["port"].to!ushort,
+        config["db"]["username"].to!string,
+        config["db"]["password"].to!string,
+        config["db"]["database"].to!string
+    );
 }
 
-private void connectMongo(string host, string dbName)
+private void connectMongo(string host, ushort port, string username, string password, string dbName)
 {
-    mongo = connectMongoDB();
+    MongoClientSettings settings = new MongoClientSettings;
+    settings.username = username;
+    settings.digest = MongoClientSettings.makeDigest(username, password);
+    settings.database = dbName;
+    settings.hosts = [MongoHost(host, port)];
+    mongo = connectMongoDB(settings).getDatabase(dbName);
 }
 
 /++
@@ -33,12 +43,12 @@ private string getCollectionName(T)() @safe
 {
     import mistwood.data : Farm, Player;
 
-    if (is(T == Farm))
+    static if (is(T == Farm))
     {
         return "farms";
     }
 
-    else if (is(T == Player))
+    else static if (is(T == Player))
     {
         return "players";
     }
@@ -100,7 +110,7 @@ public Nullable!R findOne(R, T)(T query) @safe
  +/
 public Nullable!R findOneById(R, T)(T id) @safe
 {
-    return findOne!R(["ID", id]);
+    return findOne!R(["ID": id]);
 }
 
 /++ 
@@ -111,5 +121,5 @@ public Nullable!R findOneById(R, T)(T id) @safe
  +/
 public Nullable!R findOneByName(R, T)(T name) @safe
 {
-    return findOne!R(["Name", name]);
+    return findOne!R(["Name": name]);
 }

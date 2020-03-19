@@ -105,9 +105,27 @@ public class FarmingAPI : IFarmingAPI
      +
      + Gets a specific member from the farm
      +/
-    public Json getFarmPlayer (string _farmName, string _playerName) @safe
+    public Json getFarmPlayer(string _farmName, string _playerName) @safe
     {
-        // TODO: Make this
-        return serializeToJson(["Error": "NOT IMPLEMENTED"]);
+        import mistwood.db : findOneByName, findOneById;
+
+        auto res = findOneByName!Farm(_farmName);
+
+        enforceHTTP(!res.isNull, HTTPStatus.notFound, "Could not find farm with name: " ~ _farmName);
+
+        foreach (player; res.get().players)
+        {
+            auto playerObj = findOneById!Player(player);
+            if (!playerObj.isNull)
+            {
+                if (playerObj.get().playerName == _playerName)
+                {
+                    return serializeToJson(playerObj.get());
+                }
+            }
+        }
+
+        enforceHTTP(false, HTTPStatus.notFound, "Could not find player with name: " ~ _playerName);
+        return serializeToJson(["ERROR": "404 - NOT FOUND"]);
     }
 }

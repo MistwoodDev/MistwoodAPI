@@ -4,13 +4,14 @@ public void main()
 {
     import mistwood.db : connect;
     import mistwood.rest : FarmingAPI;
+    import mistwood.data.file : config;
 
     URLRouter router = new URLRouter();
     router.registerRestInterface(new FarmingAPI());
 
     HTTPServerSettings serverSettings = new HTTPServerSettings();
-    serverSettings.bindAddresses = ["127.0.0.1"];
-    serverSettings.port = 5000;
+    serverSettings.bindAddresses = [config["server"]["host"].to!string];
+    serverSettings.port = config["server"]["port"].to!ushort;
 
     listenHTTP(serverSettings, router);
 

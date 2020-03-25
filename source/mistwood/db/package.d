@@ -1,3 +1,3 @@
 module mistwood.db;
 
-public import mistwood.db.farmingdb;
+public import mistwood.db.db;

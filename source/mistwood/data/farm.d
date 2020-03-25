@@ -31,5 +31,17 @@ public struct Farm
      + All the members (UUID) in the farm
      +/
     @name("Players")
-    public string[] players; // TODO: ?
+    public string[] players;
+
+    /++
+     + Info about the farm region
+     +/
+    @name("Info")
+    public string info;
+
+    /++
+     + The date the farm was created
+     +/
+    @name("Date")
+    public string date;
 }

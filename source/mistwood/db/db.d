@@ -1,4 +1,4 @@
-module mistwood.db.farmingdb;
+module mistwood.db.db;
 
 import vibe.d;
 import std.typecons;
@@ -8,7 +8,7 @@ import std.conv;
 /++
  + List of all the collections in the database
  +/
-public const string[] collectionNames = ["players", "farms"];
+public const string[] collectionNames = ["players", "farms", "tokens", "auth-keys"];
 
 private MongoDatabase mongo;
 
@@ -41,7 +41,7 @@ private void connectMongo(string host, ushort port, string username, string pass
  +/
 private string getCollectionName(T)() @safe
 {
-    import mistwood.data : Farm, Player;
+    import mistwood.data : Farm, Player, Token, AuthKey;
 
     static if (is(T == Farm))
     {
@@ -51,6 +51,16 @@ private string getCollectionName(T)() @safe
     else static if (is(T == Player))
     {
         return "players";
+    }
+
+    else static if (is(T == Token))
+    {
+        return "tokens";
+    }
+
+    else static if (is(T == AuthKey))
+    {
+        return "auth-keys";
     }
 
     else
@@ -64,20 +74,24 @@ private string getCollectionName(T)() @safe
  +
  + The collection is automatically determined from the item type. It will throw an error if you try to insert an invalid type.
  +/
-// unused so far
-public void insert(T)(T item) { }
+public void insert(T)(T item)
+{
+    MongoCollection collection = mongo[getCollectionName!T()];
+
+    Json data;
+    data = serializeToJson(item);
+
+    collection.insert(data);
+}
 
 /++
  + Removes one item from the DB, using the specified query
  +/
-// unused so far
-public void removeOne(R, T)(T query) @safe { }
-
-/++
- + Removes an existing object, with the specified id
- +/
-// unused so far
-public void removeOneById(R, T)(T id) @safe { }
+public void removeOne(R, T)(T query) @safe
+{
+    MongoCollection collection = mongo[getCollectionName!R()];
+    collection.remove(query);
+}
 
 /++
  + Get the count of objects in the collection

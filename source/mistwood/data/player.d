@@ -28,6 +28,12 @@ public struct Player
     public string farm;
 
     /++
+     + The name of the farm the player is currently a member of
+     +/
+    @name("FarmName")
+    public string farmName;
+
+    /++
      + The permission level the player has in the farm
      +/
     @name("FarmPermission")

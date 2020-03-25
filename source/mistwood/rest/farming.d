@@ -1,6 +1,5 @@
 module mistwood.rest.farming;
 
-import std.stdio;
 import mistwood.data;
 import vibe.d;
 

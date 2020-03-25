@@ -41,7 +41,7 @@ private void connectMongo(string host, ushort port, string username, string pass
  +/
 private string getCollectionName(T)() @safe
 {
-    import mistwood.data : Farm, Player, Token, AuthKey;
+    import mistwood.data : Farm, Player;
 
     static if (is(T == Farm))
     {
@@ -51,16 +51,6 @@ private string getCollectionName(T)() @safe
     else static if (is(T == Player))
     {
         return "players";
-    }
-
-    else static if (is(T == Token))
-    {
-        return "tokens";
-    }
-
-    else static if (is(T == AuthKey))
-    {
-        return "auth-keys";
     }
 
     else
